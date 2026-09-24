@@ -43,11 +43,11 @@ function frames(folder, count) {
 
 /** @type {{id: string, label: string, focal: number, desc: string}[]} */
 const GENRES = [
-  { id: "people", label: "People", focal: 85, desc: "Nolan-poster self-portraits, strangers boxed in by city frames, and portraits from the archive." },
-  { id: "streets", label: "Streets", focal: 35, desc: "Wandering with no plan, chasing whatever colour stops me first." },
+  { id: "people", label: "People", focal: 85, desc: "Strangers framed by the city, and portraits from the archive." },
+  { id: "streets", label: "Streets", focal: 35, desc: "Walking with no plan and shooting whatever colour stops me first." },
   { id: "facades", label: "Facades", focal: 24, desc: "A week of hunting for curves, and the symmetry of Bara Imambara." },
-  { id: "light-objects", label: "Light & Objects", focal: 50, desc: "Long exposures and light-painting: what one source does to a dark room." },
-  { id: "concepts", label: "Concepts", focal: 100, desc: "Split frames: sun and moon, two cities, two statues side by side." },
+  { id: "light-objects", label: "Light & Objects", focal: 50, desc: "Long exposures and light painting in a dark room." },
+  { id: "concepts", label: "Concepts", focal: 100, desc: "My life as Nolan movie posters, and photos split in two: sun and moon, two cities, two statues." },
   { id: "technique", label: "Technique", focal: 135, desc: "My composition cheat sheet, and subject anchoring explained." },
 ];
 
@@ -55,13 +55,13 @@ const GENRES = [
 const STORIES = [
   {
     id: "nolan",
-    genre: "people",
+    genre: "concepts",
     instagramUrl: "https://www.instagram.com/raghavapramod/p/DbLhh34AQnA/",
     title: "What if Christopher Nolan directed my life?",
     category: "The one where I got carried away",
     note: "All shot on my phone. I did my own Joker face paint for this one, so judge the eyeliner gently.",
     behindTheShot: true,
-    perspective: "This is probably the most fun I've had shooting anything. It started as a dumb question — what if the world around me was actually a Nolan film? — and turned into a full poster series shot entirely on a phone. For the Joker/Dark Knight poster I did my own face paint (first and last time, my bathroom mirror will confirm) and had the buildings behind me thrown out of focus so your eye has nowhere to go but the face. The Inception one is just an office building shot straight up with the phone, then flipped and mirrored until the sky looked like it was folding in on itself — no editing trickery beyond that. Tenet's the one I'm proudest of: a double exposure with myself shot twice, once normal and once inverted, to get that 'moving forward and backward at once' feeling without any effects filters. Oppenheimer is a bottle of cold brew lit from below in a dark room — sometimes 'the bomb' is just good backlighting and a steady hand. And the Dunkirk and Odyssey shots are just travel photos that already had the mood, I didn't even have to try for those.",
+    perspective: "This is the most fun I've had shooting anything. It started with a silly question: what if my life was a Nolan film? It turned into a full poster series, all shot on my phone. For the Dark Knight poster, I did my own Joker face paint (first and last time, my bathroom mirror will confirm) and blurred the buildings behind me so your eye goes straight to the face. For Inception, I shot an office building straight up, then flipped and mirrored it until the sky looked like it was folding in on itself. Tenet is the one I'm proudest of. It's a double exposure of me, once upright and once upside down, to get that forward and backward feeling without any filters. Oppenheimer is a bottle of cold brew lit from below in a dark room. Sometimes 'the bomb' is just good backlighting and a steady hand. Dunkirk and Odyssey are travel photos that already had the mood. I didn't have to try for those.",
     images: frames("nolan", 9),
   },
   {
@@ -70,9 +70,9 @@ const STORIES = [
     instagramUrl: "https://www.instagram.com/raghavapramod/p/DX9dPskgfzy/",
     title: "My cheat sheet for composition",
     category: "The one that's basically a tutorial",
-    note: "I put together every composition rule I actually use, with a real photo for each one.",
+    note: "Every composition rule I use, with a real photo for each one.",
     behindTheShot: true,
-    perspective: "I made this one as much for myself as for anyone else. It's a running list of the composition rules I actually reach for, each paired with a photo where I used it. There's the rule of thirds on a drink at a bar table. A door and a stool are split cleanly down the middle for 'vertical half and half.' Then I go through leading lines, frame-within-a-frame, and diagonals one by one. None of it is complicated. Most of the time, I just pause for two extra seconds before taking the shot and ask where the eye is going to land first.",
+    perspective: "I made this one for myself as much as for anyone else. It's a list of the composition rules I use, each with a photo where I used it. The rule of thirds on a drink at a bar table. A door and a stool split down the middle for 'vertical half and half.' Then leading lines, frames within frames, and diagonals. None of it is complicated. Most of the time I just pause for two extra seconds and ask where the eye will land first.",
     images: frames("composition", 20),
   },
   {
@@ -80,10 +80,10 @@ const STORIES = [
     genre: "people",
     instagramUrl: "https://www.instagram.com/raghavapramod/p/DbFloqJAYiS/",
     title: "For the love of framing",
-    category: "People, through the frames a city gives you",
-    note: "Shot in monochrome so the shapes do the talking instead of the colours.",
+    category: "People, framed by the city",
+    note: "Shot in black and white so the shapes stand out, not the colours.",
     behindTheShot: true,
-    perspective: "I'm a sucker for a frame within a frame — windows, doorways, the gap between two buildings, anything that lets me box a person into the shot without them knowing I did it. This whole set is street photography where the 'frame' already existed before I showed up; I just had to notice it and wait for someone to walk into it. I shot it in black and white on purpose, because colour would've distracted from the actual shapes doing the work.",
+    perspective: "I love a frame within a frame. Windows, doorways, the gap between two buildings, anything that lets me box a person into the shot without them noticing. In this set, the frame was already there before I showed up. I just had to spot it and wait for someone to walk into it. I shot it in black and white on purpose, because colour would pull attention away from the shapes.",
     behindThumbs: ["images/framing/03.jpg", "images/framing/06.jpg", "images/framing/05.jpg"],
     images: frames("framing", 7),
   },
@@ -93,9 +93,9 @@ const STORIES = [
     instagramUrl: "https://www.instagram.com/raghavapramod/p/Dbfo3-egagR/",
     title: "Let there be",
     category: "Playing with light in the dark",
-    note: "No people in this one, just what light does to a room before anything else happens in it.",
+    note: "No people in this one. Just what light does to a dark room.",
     behindTheShot: true,
-    perspective: "This is my light-painting and long-exposure set. Chiaroscuro is the fancy word for it, but really I just turned the lights off to see what happened when a single source hit something interesting. The LED strip patterns, the ceiling light shot dead-on, and the circular light trails are mostly long exposures. I moved a light source through the frame while the shutter stayed open. It's slow, deliberate shooting, which feels very different from the way I usually shoot street stuff while moving.",
+    perspective: "This is my light painting and long exposure set. The fancy word for it is chiaroscuro, but really I just turned off the lights to see what one light source would do. The LED strip patterns, the ceiling light shot straight on, and the circular light trails are mostly long exposures. I moved a light through the frame while the shutter stayed open. It's slow and careful, very different from how I usually shoot on the street.",
     behindThumbs: ["images/light/08.jpg", "images/light/04.jpg", "images/light/06.jpg"],
     images: frames("light", 10),
   },
@@ -107,7 +107,7 @@ const STORIES = [
     category: "A week of hunting for curves",
     note: "I gave myself one rule for a week: no straight lines allowed in the frame.",
     behindTheShot: true,
-    perspective: "I set myself a small challenge with this one. For a while, I could only shoot curves. No straight horizons and no straight edges if I could help it. I found neon signage bent into an arc, a tunnel ceiling, and a yellow sculpture reaching up. I was chasing the s-curve and the arc wherever they appeared. It's a good exercise if you shoot a lot of architecture like I do. Straight lines and grids get easy fast, while curves make you think properly about where you're standing.",
+    perspective: "I gave myself a small challenge: for a week, I could only shoot curves. No straight horizons and no straight edges if I could help it. I found a neon sign bent into an arc, a tunnel ceiling, and a yellow sculpture reaching up. If you shoot a lot of buildings like I do, try it. Straight lines get easy fast. Curves make you think about where you're standing.",
     behindThumbs: ["images/curved/13.jpg", "images/curved/06.jpg", "images/curved/12.jpg"],
     images: frames("curved", 16),
   },
@@ -117,9 +117,9 @@ const STORIES = [
     instagramUrl: "https://www.instagram.com/raghavapramod/p/DYccQa4AdBd/",
     title: "Harmony found in the divide",
     category: "Two halves, one frame",
-    note: "Split-frame shots with the sun and moon, two cities, and two statues sitting side by side.",
+    note: "Photos split in two: the sun and moon, two cities, and two statues side by side.",
     behindTheShot: true,
-    perspective: "This one's a juxtaposition set. I split each frame straight down the middle and put two contrasting things on either side. The sun bleeds into the moon in the same sky. A Hyderabad sunrise sits beside a Goa evening. Two carved figures, one polished and one made of raw wood, are stitched together. It isn't really about one clever shot. It's about noticing that two separate photos placed side by side can say something neither of them says alone.",
+    perspective: "In this set, I split each frame down the middle and put two opposite things on either side. The sun fades into the moon in the same sky. A Hyderabad sunrise sits next to a Goa evening. Two carved figures, one polished and one raw wood, are joined together. Two photos side by side can say something neither one says alone.",
     behindThumbs: ["images/duality/02.jpg", "images/duality/03.jpg"],
     images: frames("duality", 6),
   },
@@ -129,9 +129,9 @@ const STORIES = [
     instagramUrl: "https://www.instagram.com/raghavapramod/p/DVn-7-ICOil/",
     title: "Where the colours were louder than the streets",
     category: "Just wandering with my phone out",
-    note: "No plan for this walk, just chasing whatever colour caught my eye first.",
+    note: "No plan for this walk. I just followed whatever colour caught my eye.",
     behindTheShot: true,
-    perspective: "This set is just me wandering with no destination and my phone in my hand, which is probably my favourite way to shoot. I didn't have a brief or a composition challenge. I just walked until a paint colour, a market stall, or a bridge made me stop. It's the least 'technical' set here and probably the closest to how my brain actually works when I'm shooting for fun instead of following a concept.",
+    perspective: "This set is me walking with no destination and my phone in my hand. It's my favourite way to shoot. No brief, no challenge. I just kept walking until a colour on a wall, a market stall, or a bridge made me stop. It's the least technical set here, and the closest to how I shoot when I'm just having fun.",
     behindThumbs: ["images/streetcolors/13.jpg", "images/streetcolors/09.jpg", "images/streetcolors/12.jpg"],
     images: frames("streetcolors", 14),
   },
@@ -141,9 +141,9 @@ const STORIES = [
     instagramUrl: "https://www.instagram.com/raghavapramod/p/Cj5iw9hBEyD/",
     title: "Structural views",
     category: "Bara Imambara, shot with nothing extra",
-    note: "No filters, no accessories — just symmetry and patience at one of Lucknow's oldest buildings.",
+    note: "No filters, no extra gear. Just symmetry and patience at one of Lucknow's oldest buildings.",
     behindTheShot: true,
-    perspective: "I shot this whole set at Bara Imambara in Lucknow under my own '#withnothing' rule — no lenses, no gimbal, no filters, just the phone in my hand and however much patience it took to get the symmetry right. Old buildings like this basically hand you the composition if you're willing to stand in the right spot and wait for the frame to clear. It's less about technique and more about respecting that the building already did the hard work centuries ago.",
+    perspective: "I shot this set at Bara Imambara in Lucknow with my own #withnothing rule: no lenses, no gimbal, no filters. Just my phone and enough patience to get the symmetry right. Old buildings like this give you the composition if you stand in the right spot and wait for the frame to clear. The building did the hard work centuries ago.",
     behindThumbs: ["images/architecture/04.jpg", "images/architecture/03.jpg", "images/architecture/06.jpg"],
     images: frames("architecture", 7),
   },
@@ -153,9 +153,9 @@ const STORIES = [
     instagramUrl: "https://www.instagram.com/raghavapramod/p/DZ7x7YUAT19/",
     title: "Remaining constant",
     category: "Subject anchoring, explained",
-    note: "One point stays dead still while I let everything else in the frame move or blur.",
+    note: "One point stays still while everything else in the frame moves or blurs.",
     behindTheShot: true,
-    perspective: "This is 'subject anchoring' — picking one point in the frame that stays perfectly sharp and still, and letting everything else move, blur, or fall out of focus around it. It's a technique I use a lot for anything with motion in it, because it gives the eye somewhere safe to land before it goes exploring the rest of the frame. Simple idea, but it took me a while to get the timing right.",
+    perspective: "This is subject anchoring. I pick one point in the frame that stays sharp and still, and let everything around it move or blur. I use it a lot when there's motion in a shot, because it gives the eye a place to land before it explores the rest. Simple idea, but it took me a while to get the timing right.",
     behindThumbs: ["images/technique/03.jpg", "images/technique/02.jpg", "images/technique/04.jpg"],
     images: frames("technique", 7),
   },
@@ -165,9 +165,9 @@ const STORIES = [
     instagramUrl: "https://www.instagram.com/raghavapramod/p/DUI6xTbAZIs/",
     title: "Clicked, archived and highlighted",
     category: "Portraits from the gallery",
-    note: "A round-up of portraits I've shot over the years, pulled out of the archive and put together in one place.",
+    note: "Portraits I've taken over the years, pulled from the archive into one place.",
     behindTheShot: true,
-    perspective: "This one's less a single shoot and more a highlight reel. I went digging through years of portraits I've taken of friends and strangers and picked out the ones that still hold up. Some are lit and planned, like the one against the orange backdrop. Others are just someone caught mid-laugh or mid-thought with whatever light was around at the time. What ties them together isn't the setup, it's that in each one the person actually looks like themselves and not like they're posing for a camera.",
+    perspective: "This is a highlight reel, not a single shoot. I went through years of portraits of friends and strangers and picked the ones that still hold up. Some are planned and lit, like the one against the orange backdrop. Others catch someone laughing or thinking, in whatever light was around. In every one, the person looks like themselves, not like they're posing.",
     behindThumbs: ["images/portraits/06.jpg"],
     images: frames("portraits", 9),
   },
@@ -416,7 +416,7 @@ function buildStoryCard(story) {
     btn.setAttribute("aria-label", `Open photograph from "${story.title}" at full size`);
     const img = document.createElement("img");
     img.src = src;
-    img.alt = `${story.title} — a photograph from the sequence`;
+    img.alt = `Photo ${i + 1} of ${story.images.length} from ${story.title}`;
     img.loading = i < 2 ? "eager" : "lazy";
     img.decoding = "async";
     btn.appendChild(img);
@@ -490,7 +490,7 @@ function renderShotsPage() {
   const intro = document.getElementById("shots-intro");
   if (heading) heading.textContent = "My shots";
   if (intro) {
-    intro.textContent = "Everything, grouped the way I shoot it. Straight from my Instagram, every photo in every carousel, nothing trimmed.";
+    intro.textContent = "Every photo from my Instagram posts, grouped by the kind of shot.";
   }
 
   GENRES.forEach((genre) => {
@@ -607,7 +607,7 @@ function renderLightboxFrame() {
   const { story, index } = lightboxState;
   if (!story) return;
   img.src = story.images[index];
-  img.alt = `${story.title} — full photograph, ${story.category}`;
+  img.alt = `${story.title}, full size`;
   caption.textContent = `${story.title} · ${story.category}`;
 }
 
@@ -702,19 +702,19 @@ const ARTICLES = [
   {
     title: "The Intersection of Industrial Design and HR: Innovation Meets People Strategy",
     url: "https://www.linkedin.com/pulse/intersection-industrial-design-hr-innovation-meets-people-pramod-zr3pc/",
-    blurb: "What happens when you treat HR like a design problem. I get into empathy mapping, prototyping policies before you roll them out, and a few case studies on what that's actually done for companies that tried it.",
+    blurb: "What happens when you treat HR like a design problem. I cover empathy mapping, testing policies before rollout, and what changed for companies that tried it.",
     date: "Apr 2025",
   },
   {
     title: "The Power of Organizational Culture: Good vs. Bad",
     url: "https://www.linkedin.com/posts/raghava-pramod-16317697_organizationalculture-employeeengagement-activity-7211588359993925633-s92X",
-    blurb: "A stats-heavy one. Good culture versus bad culture, side by side, and just how much it actually moves the needle on retention, revenue, and everything in between.",
+    blurb: "Good culture and bad culture, side by side, with the numbers. How much culture affects retention, revenue, and more.",
     date: "Jun 2024",
   },
   {
     title: "Foundations of Change: Why Infrastructure Is Directly Proportional to Cultural Transformation and Effectiveness",
     url: "https://www.linkedin.com/pulse/foundations-change-why-infrastructure-directly-cultural-pramod-og4bc/",
-    blurb: "Culture change gets all the attention, but it doesn't stick without the right infrastructure behind it. This one breaks down the physical, operational, and communication pieces that actually hold a culture shift together.",
+    blurb: "Culture change gets the attention, but it won't last without the right support behind it. I break down the spaces, processes, and communication that make it stick.",
     date: "Jan 2024",
   },
 ];
@@ -738,7 +738,7 @@ function renderArticles() {
   const list = document.getElementById("articles-list");
   if (!list) return;
   if (!ARTICLES.length) {
-    list.innerHTML = `<p class="empty-note">Nothing linked up here yet — check back soon.</p>`;
+    list.innerHTML = `<p class="empty-note">Nothing here yet. Check back soon.</p>`;
     return;
   }
   ARTICLES.forEach((article) => list.appendChild(buildArticleCard(article)));
@@ -797,7 +797,7 @@ function buildSongEntry(entry) {
   row.className = "song-entry reveal";
   row.innerHTML = `
     <span class="eyebrow">${entry.date}</span>
-    <h3 class="song-title">${entry.song} <span class="song-artist">— ${entry.artist}</span></h3>
+    <h3 class="song-title">${entry.song} <span class="song-artist">by ${entry.artist}</span></h3>
     <p class="song-note">${entry.note}</p>
     <a class="ig-link" href="${entry.url}" target="_blank" rel="noopener noreferrer">Listen</a>
   `;
@@ -808,7 +808,7 @@ function renderSongLog() {
   const list = document.getElementById("song-log-list");
   if (!list) return;
   if (!SONGS.length) {
-    list.innerHTML = `<p class="empty-note">Nothing logged yet — first entry's coming soon.</p>`;
+    list.innerHTML = `<p class="empty-note">No picks yet. The first one is coming soon.</p>`;
     return;
   }
   SONGS.forEach((entry) => list.appendChild(buildSongEntry(entry)));

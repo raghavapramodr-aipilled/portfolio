@@ -15,8 +15,9 @@ find .git -name 'tmp_obj_*' -delete 2>/dev/null || true
 # make sure we are on main
 git symbolic-ref HEAD refs/heads/main
 
-# CSS/JS changed? bump ?v= on every page so browsers fetch the new files
-if [ -n "$(git status --porcelain -- styles.css script.js)" ]; then
+# CSS/JS changed since the last deploy? bump ?v= on every page so browsers fetch the new files
+LAST="$(cat .git/last-deployed 2>/dev/null || echo HEAD)"
+if ! git diff --quiet "$LAST" -- styles.css script.js; then
   V=$(grep -ho 'styles\.css?v=[0-9]*' *.html | grep -o '[0-9]*$' | sort -n | tail -1)
   V=$((V + 1))
   perl -pi -e "s/(styles\.css|script\.js)\?v=\d+/\1?v=$V/g" *.html
