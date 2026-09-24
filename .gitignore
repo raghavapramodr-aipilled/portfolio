@@ -1,5 +1,7 @@
 .DS_Store
+.claude/
 _backup-before-lens-update/
 portfolio-netlify.zip
+chatgpt-rewrite-prompt.md
 .netlify/
 node_modules/
