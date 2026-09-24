@@ -1,7 +1,8 @@
-# Static site: no build step, publish the repo root as-is.
+# Static site: every push to main on GitHub publishes the repo root.
+# The "build" only drops repo tooling so it isn't served publicly.
 [build]
   publish = "."
-  command = ""
+  command = "rm -f deploy.sh .gitignore"
 
 # Pretty URLs: /shots instead of /shots.html
 [[redirects]]
