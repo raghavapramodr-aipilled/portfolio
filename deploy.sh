@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
-# Publish this folder: commit, back up to GitHub, deploy live to Netlify.
+# Publish this folder: save, push to GitHub, and wait until it's live.
+# Netlify is linked to the GitHub repo, so every push to main publishes
+# raghavapramod.com. If GitHub or Netlify has a problem, this uploads
+# straight to Netlify instead.
 # Usage:  ./deploy.sh "what changed"   (or double-click "Update Website" on the Desktop)
 set -e
 cd "$(dirname "$0")"
 export PATH="$PATH:$HOME/.local/node/bin"      # where the netlify CLI lives
+export GIT_TERMINAL_PROMPT=0                   # never stop to ask for a password
 
 SITE_ID=84267549-98df-44d7-b883-01258ba32e83   # Netlify project raghavapramod.com
 MSG="${1:-Site update $(date '+%b %-d, %H:%M')}"
@@ -14,6 +18,20 @@ find .git -name 'tmp_obj_*' -delete 2>/dev/null || true
 
 # make sure we are on main
 git symbolic-ref HEAD refs/heads/main
+
+# pick up anything edited on github.com first
+if git fetch -q origin main 2>/dev/null; then
+  if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+    if git merge-base --is-ancestor HEAD origin/main; then
+      git merge -q --ff-only --autostash origin/main
+      echo "Pulled in changes made on GitHub."
+    elif ! git merge-base --is-ancestor origin/main HEAD; then
+      echo "GitHub and this Mac each have changes the other doesn't."
+      echo "Ask Claude to combine them, then run this again."
+      exit 1
+    fi
+  fi
+fi
 
 # CSS/JS changed since the last deploy? bump ?v= on every page so browsers fetch the new files
 LAST="$(cat .git/last-deployed 2>/dev/null || echo HEAD)"
@@ -28,19 +46,47 @@ fi
 git rm -r --cached --quiet --ignore-unmatch .claude chatgpt-rewrite-prompt.md 2>/dev/null || true
 
 git add -A
-git commit -q -m "$MSG" && echo "Saved: $MSG" || echo "Nothing new to commit."
+git commit -q -m "$MSG" && echo "Saved: ${MSG%%$'\n'*}" || echo "Nothing new to commit."
+SHA="$(git rev-parse HEAD)"
 
-# GitHub is the backup; a missing login shouldn't block going live
-GIT_TERMINAL_PROMPT=0 git push -q -u origin main 2>/dev/null \
-  && echo "Backed up to GitHub." \
-  || echo "GitHub backup skipped (no saved login) — deploying anyway."
+# wait for Netlify's build of this commit to go live (up to ~3 minutes)
+wait_for_netlify() {
+  local state=""
+  for _ in $(seq 36); do
+    state=$(netlify api listSiteDeploys --data "{\"site_id\":\"$SITE_ID\",\"per_page\":10}" 2>/dev/null \
+      | python3 -c "
+import sys, json
+for d in json.load(sys.stdin):
+    if d.get('commit_ref') == '$SHA' and d.get('context') == 'production':
+        print(d['state']); break" 2>/dev/null) || true
+    case "$state" in
+      ready) echo "Netlify finished publishing."; return 0 ;;
+      error) echo "Netlify's build failed."; return 1 ;;
+    esac
+    sleep 5
+  done
+  echo "Netlify is taking longer than usual."
+  return 1
+}
 
-# deploy exactly what's committed: no backups, zip or local notes
-STAGE="$(mktemp -d)"
-trap 'rm -rf "$STAGE"' EXIT
-git archive HEAD | tar -x -C "$STAGE"
-rm -f "$STAGE/deploy.sh" "$STAGE/.gitignore"
-(cd "$STAGE" && netlify deploy --prod --no-build --dir . --site "$SITE_ID" --message "${MSG%%$'\n'*}")
+# fallback: upload exactly what's committed (no backups, zip or local notes)
+upload_directly() {
+  echo "Uploading straight to Netlify instead..."
+  local stage
+  stage="$(mktemp -d)"
+  git archive HEAD | tar -x -C "$stage"
+  rm -f "$stage/deploy.sh" "$stage/.gitignore"
+  (cd "$stage" && netlify deploy --prod --no-build --dir . --site "$SITE_ID" --message "${MSG%%$'\n'*}")
+  rm -rf "$stage"
+}
 
-git rev-parse HEAD > .git/last-deployed
+if git push -q -u origin main 2>/dev/null; then
+  echo "Pushed to GitHub. Netlify is publishing it..."
+  wait_for_netlify || upload_directly
+else
+  echo "Couldn't reach GitHub."
+  upload_directly
+fi
+
+echo "$SHA" > .git/last-deployed
 echo "Live at https://raghavapramod.com"
