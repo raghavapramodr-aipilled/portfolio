@@ -786,6 +786,40 @@ const SONGS = [
     ],
     trivia: "DC is Lokesh Kanagaraj's first film as the lead actor. Anirudh also scored Vikram and Leo, the films Lokesh directed.",
   },
+  {
+    date: "Week of Sep 14, 2026",
+    from: "From A Rush of Blood to the Head",
+    song: "Clocks",
+    artist: "Coldplay",
+    url: "https://open.spotify.com/track/0BCPKOYdS2jbQ8iyB56Zns",
+    art: "https://i.scdn.co/image/ab67616d0000b273de09e02aa7febf30b7c02d82",
+    note: "That piano riff is one of the most recognisable openings of the 2000s, and it still hasn't worn out for me. It cycles through the same three chords while the drums push underneath at 131 BPM, so the song always feels like it's running somewhere. Chris Martin stays calm on top of all that motion, which is exactly the contrast the song is about. More than twenty years on, it still sounds like the start of something.",
+    facts: [
+      ["Tempo", "131 BPM"],
+      ["Key", "E flat Mixolydian"],
+      ["Length", "5:07"],
+      ["Released", "Aug 2002"],
+      ["Written by", "Berryman, Buckland, Champion, Martin", true],
+    ],
+    trivia: "Chris Martin came up with the riff late one night in Liverpool, and the band nearly saved it for their next album. It won the Grammy for Record of the Year in 2004.",
+  },
+  {
+    date: "Week of Sep 7, 2026",
+    from: "From Brightest Lights",
+    song: "Sunday Song",
+    artist: "Lane 8",
+    url: "https://open.spotify.com/track/7iKmj1a0DMZExoafuQ1Lmc",
+    art: "https://i.scdn.co/image/ab67616d0000b2738e62ab7239cd10dfc2404d2f",
+    note: "This is the song I put on when the week is finally done. It takes its time, building slowly out of warm synths and spliced vocals into something wide open. At 124 BPM it's technically dance music, but it feels more like a long exhale. Nothing in it is in a hurry, and that's the whole point.",
+    facts: [
+      ["Tempo", "124 BPM"],
+      ["Key", "C minor"],
+      ["Length", "4:29"],
+      ["Released", "Oct 2019"],
+      ["Label", "This Never Happened", true],
+    ],
+    trivia: "Lane 8 is Daniel Goldstein. He's said this track got a poor reaction the first time he played it out, but he kept it exactly the way he heard it.",
+  },
 ];
 
 function playlistEmbedUrl(url) {
@@ -815,6 +849,7 @@ function renderPlaylists() {
 }
 
 // Album art on the left; the text column stretches to the same height.
+// On narrower screens the art shrinks to sit beside the heading only.
 function buildSongEntry(entry) {
   const row = document.createElement("article");
   row.className = `song-entry reveal${entry.art ? " has-art" : ""}`;
@@ -825,11 +860,13 @@ function buildSongEntry(entry) {
   row.innerHTML = `
     ${entry.art ? `
     <a class="song-art" href="${entry.url}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
-      <img src="${entry.art}" alt="" loading="lazy">
+      <img src="${entry.art}" alt="" width="640" height="640" loading="lazy">
     </a>` : ""}
-    <div class="song-body">
+    <div class="song-head">
       <span class="eyebrow">${entry.date}${entry.from ? ` · ${entry.from}` : ""}</span>
       <h3 class="song-title">${entry.song} <span class="song-artist">by ${entry.artist}</span></h3>
+    </div>
+    <div class="song-body">
       <p class="song-note">${entry.note}</p>
       ${facts ? `<dl class="song-facts">${facts}</dl>` : ""}
       ${entry.trivia ? `<p class="song-trivia"><strong>Did you know?</strong> ${entry.trivia}</p>` : ""}
