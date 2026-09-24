@@ -752,6 +752,10 @@ function renderArticles() {
 // ─────────────────────────────────────────────────────────────
 // Add one object to SONGS: { date, song, artist, note, url }.
 // `url` should be a public Spotify or YouTube link to the track.
+// Optional: `from` (film/album, shown next to the date), `art`
+// (album cover URL, shown on the left), `facts` ([label, value]
+// pairs shown as a small grid; add `true` as a third item to make
+// a fact span two columns) and `trivia` (one "Did you know?" line).
 // Newest entries first.
 // ─────────────────────────────────────────────────────────────
 
@@ -763,8 +767,26 @@ const PLAYLISTS = [
   { name: "City of the Sun: Complete Collection", url: "https://open.spotify.com/playlist/2aotntEEmu4JaZjBxoBrHF" },
 ];
 
-/** @type {{date: string, song: string, artist: string, note: string, url: string}[]} */
-const SONGS = [];
+/** @type {{date: string, song: string, artist: string, note: string, url: string, from?: string, art?: string, facts?: Array<[string, string, boolean?]>, trivia?: string}[]} */
+const SONGS = [
+  {
+    date: "Week of Sep 21, 2026",
+    from: "From the film DC",
+    song: "Namaste",
+    artist: "Anirudh Ravichander",
+    url: "https://open.spotify.com/track/5WY5v1piCQgZmOFIDjVvL5",
+    art: "https://i.scdn.co/image/ab67616d0000b273b90520d9172e8beeaeb6449b",
+    note: "Namaste puts a Sanskrit chant to Shiva right next to heavy percussion and lines that belong in an action film, and it works far better than it should. Anirudh keeps it at 89 BPM, so nothing feels rushed and every drum hit has room to land. As someone who plays the tabla, I love how much of this song is carried by rhythm alone. It's only two and a half minutes long, which is exactly why it's been on repeat all week.",
+    facts: [
+      ["Tempo", "89 BPM"],
+      ["Length", "2:30"],
+      ["Released", "Jul 24, 2026"],
+      ["Music & vocals", "Anirudh Ravichander"],
+      ["Lyrics", "Anirudh, Heisenberg, Vedan, Ashwin Krishna", true],
+    ],
+    trivia: "DC is Lokesh Kanagaraj's first film as the lead actor. Anirudh also scored Vikram and Leo, the films Lokesh directed.",
+  },
+];
 
 function playlistEmbedUrl(url) {
   const id = url.split("/playlist/")[1]?.split("?")[0];
@@ -792,14 +814,29 @@ function renderPlaylists() {
   PLAYLISTS.forEach((playlist) => list.appendChild(buildPlaylistCard(playlist)));
 }
 
+// Album art on the left; the text column stretches to the same height.
 function buildSongEntry(entry) {
   const row = document.createElement("article");
-  row.className = "song-entry reveal";
+  row.className = `song-entry reveal${entry.art ? " has-art" : ""}`;
+  const facts = (entry.facts || [])
+    .map(([label, value, wide]) => `<div${wide ? ' class="is-wide"' : ""}><dt>${label}</dt><dd>${value}</dd></div>`)
+    .join("");
+  const onSpotify = entry.url.includes("spotify.com");
   row.innerHTML = `
-    <span class="eyebrow">${entry.date}</span>
-    <h3 class="song-title">${entry.song} <span class="song-artist">by ${entry.artist}</span></h3>
-    <p class="song-note">${entry.note}</p>
-    <a class="ig-link" href="${entry.url}" target="_blank" rel="noopener noreferrer">Listen</a>
+    ${entry.art ? `
+    <a class="song-art" href="${entry.url}" target="_blank" rel="noopener noreferrer" tabindex="-1" aria-hidden="true">
+      <img src="${entry.art}" alt="" loading="lazy">
+    </a>` : ""}
+    <div class="song-body">
+      <span class="eyebrow">${entry.date}${entry.from ? ` · ${entry.from}` : ""}</span>
+      <h3 class="song-title">${entry.song} <span class="song-artist">by ${entry.artist}</span></h3>
+      <p class="song-note">${entry.note}</p>
+      ${facts ? `<dl class="song-facts">${facts}</dl>` : ""}
+      ${entry.trivia ? `<p class="song-trivia"><strong>Did you know?</strong> ${entry.trivia}</p>` : ""}
+      <a class="ig-link song-link" href="${entry.url}" target="_blank" rel="noopener noreferrer">
+        ${onSpotify ? `Listen on Spotify ${svgIcon("spotify")}` : "Listen"}
+      </a>
+    </div>
   `;
   return row;
 }
