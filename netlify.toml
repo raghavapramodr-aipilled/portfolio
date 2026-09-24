@@ -1,8 +1,8 @@
 # Static site: every push to main on GitHub publishes the repo root.
-# The "build" only drops repo tooling so it isn't served publicly.
+# The "build" only drops repo tooling and the GitHub README so they aren't served publicly.
 [build]
   publish = "."
-  command = "rm -f deploy.sh .gitignore"
+  command = "rm -rf deploy.sh .gitignore README.md screenshots"
 
 # Pretty URLs: /shots instead of /shots.html
 [[redirects]]
@@ -16,6 +16,10 @@
 [[redirects]]
   from = "/music"
   to = "/music.html"
+  status = 200
+[[redirects]]
+  from = "/ai-pill"
+  to = "/ai-pill.html"
   status = 200
 [[redirects]]
   from = "/contact"

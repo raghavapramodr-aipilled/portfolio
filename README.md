@@ -1,6 +1,6 @@
 # Raghava Pramod
 
-My personal site, live at **[raghavapramod.com](https://raghavapramod.com)**. It has the photos I've taken (mostly on my phone), a few articles on work and hiring, and the music I've been listening to.
+My personal site, live at **[raghavapramod.com](https://raghavapramod.com)**. It has the photos I've taken (mostly on my phone), a few articles on work and hiring, the music I've been listening to, and the things I've built with AI.
 
 ![Home page](screenshots/home.jpg)
 
@@ -14,6 +14,12 @@ Photos are grouped by the kind of shot. Hover a focal length on the lens to prev
 |---|---|
 | ![A photo series](screenshots/shots-series.jpg) | ![Photo viewer](screenshots/shots-viewer.jpg) |
 
+## AI Pill
+
+Things I've built with AI: Shutter Quest: Afterlight, the HR Operations Dashboard and this site. Each project uses the same card as My shots, with screenshots you can open full size and a note on how it works.
+
+![AI Pill page](screenshots/ai-pill.jpg)
+
 ## Articles, Music, Say hi
 
 | Articles | Music | Say hi |
@@ -22,7 +28,7 @@ Photos are grouped by the kind of shot. Hover a focal length on the lens to prev
 
 ## On a phone
 
-![Home, My shots and Music on a phone](screenshots/mobile.jpg)
+![Home, My shots and AI Pill on a phone](screenshots/mobile.jpg)
 
 ## How it's built
 
@@ -34,8 +40,9 @@ Plain HTML, CSS and JavaScript, with no framework and no build step.
 | `shots.html` | My shots, with the lens picker and photo viewer |
 | `articles.html` | Articles |
 | `music.html` | Music (Spotify playlists) |
+| `ai-pill.html` | AI Pill, the projects I've built with AI |
 | `contact.html` | Say hi |
-| `script.js` | Photo series data and all page behaviour |
+| `script.js` | Photo series and project data, and all page behaviour |
 | `styles.css` | Styles for every page |
 | `images/` | The photos |
 | `netlify.toml` | Netlify settings: short page links and image caching |
@@ -49,7 +56,7 @@ Double-click **Update Website** on the Desktop, or run:
 ./deploy.sh "what changed"
 ```
 
-It saves the changes, backs them up to this repo, and publishes the site to Netlify.
+It saves the changes and pushes them to this repo. Netlify publishes every push to `main`, and the script waits until the site is live.
 
 ## Preview locally
 

@@ -183,6 +183,7 @@ function svgIcon(name) {
     chevronRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
     close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
     instagram: '<svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>',
+    github: '<svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-4.3 1.4-4.3-2.5-6-3m12 5v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"></path></svg>',
     layers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="14" height="14" rx="2"></rect><path d="M3 7v12a2 2 0 0 0 2 2h12"></path></svg>',
     linkedin: '<svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>',
     spotify: '<svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M7 9.2c3.2-1 7-.7 9.6 1"></path><path d="M7.6 12.6c2.7-.8 5.9-.5 8.1 1"></path><path d="M8.3 15.8c2.1-.6 4.5-.4 6.2.9"></path></svg>',
@@ -383,11 +384,21 @@ function renderLensDial() {
 // Each card: title/info | scrollable carousel | behind-the-shot copy.
 // ---------------------------------------------------------------
 
+// Also used for AI Pill projects, which pass a few extras: `links`
+// instead of instagramUrl, a muted `status` line, per-image
+// `captions`, `wide` (landscape screenshots), `itemNoun` and `behindLabel`.
 function buildStoryCard(story) {
+  const noun = story.itemNoun || "photograph";
   const card = document.createElement("article");
-  card.className = "story reveal";
+  card.className = `story reveal${story.wide ? " story--wide" : ""}`;
   card.id = `story-${story.id}`;
   card.setAttribute("aria-labelledby", `story-title-${story.id}`);
+
+  const links = story.links || (story.instagramUrl ? [{ label: "See the original post", url: story.instagramUrl, icon: "instagram" }] : []);
+  const linksHtml = links.map((l) => {
+    const external = /^https?:/.test(l.url);
+    return `<a class="ig-link" href="${l.url}"${external ? ' target="_blank" rel="noopener noreferrer"' : ""}>${l.label} ${svgIcon(l.icon)}</a>`;
+  }).join("");
 
   const info = document.createElement("div");
   info.className = "story-info";
@@ -395,9 +406,8 @@ function buildStoryCard(story) {
     <span class="eyebrow">${story.category}</span>
     <h3 class="story-title" id="story-title-${story.id}">${story.title}</h3>
     <p class="story-note">${story.note}</p>
-    <a class="ig-link" href="${story.instagramUrl}" target="_blank" rel="noopener noreferrer">
-      See the original post ${svgIcon("instagram")}
-    </a>
+    ${linksHtml}
+    ${story.status ? `<p class="story-status">${story.status}</p>` : ""}
   `;
 
   const railWrap = document.createElement("div");
@@ -406,17 +416,17 @@ function buildStoryCard(story) {
   const rail = document.createElement("div");
   rail.className = "rail";
   rail.setAttribute("role", "region");
-  rail.setAttribute("aria-label", `Photographs from "${story.title}"`);
+  rail.setAttribute("aria-label", `${noun === "photograph" ? "Photographs" : "Screenshots"} from "${story.title}"`);
   rail.tabIndex = 0;
 
   story.images.forEach((src, i) => {
     const btn = document.createElement("button");
     btn.className = "rail-card";
     btn.type = "button";
-    btn.setAttribute("aria-label", `Open photograph from "${story.title}" at full size`);
+    btn.setAttribute("aria-label", `Open ${noun} from "${story.title}" at full size`);
     const img = document.createElement("img");
     img.src = src;
-    img.alt = `Photo ${i + 1} of ${story.images.length} from ${story.title}`;
+    img.alt = story.captions?.[i] ? `${story.title}: ${story.captions[i]}` : `Photo ${i + 1} of ${story.images.length} from ${story.title}`;
     img.loading = i < 2 ? "eager" : "lazy";
     img.decoding = "async";
     btn.appendChild(img);
@@ -469,7 +479,7 @@ function buildStoryCard(story) {
   const behind = document.createElement("div");
   behind.className = "story-behind";
   behind.innerHTML = `
-    <span class="eyebrow">Behind the shot</span>
+    <span class="eyebrow">${story.behindLabel || "Behind the shot"}</span>
     <p class="shot-perspective">${story.perspective || ""}</p>
   `;
 
@@ -608,7 +618,7 @@ function renderLightboxFrame() {
   if (!story) return;
   img.src = story.images[index];
   img.alt = `${story.title}, full size`;
-  caption.textContent = `${story.title} · ${story.category}`;
+  caption.textContent = `${story.title} · ${story.captions?.[index] || story.category}`;
 }
 
 function stepLightbox(dir) {
@@ -742,6 +752,62 @@ function renderArticles() {
     return;
   }
   ARTICLES.forEach((article) => list.appendChild(buildArticleCard(article)));
+}
+
+// ---------------------------------------------------------------
+// AI Pill — things I've built with AI, one card per GitHub project.
+// Same card as My shots: info | screenshot carousel | behind the build.
+// ─────────────────────────────────────────────────────────────
+// HOW TO ADD A PROJECT
+// ─────────────────────────────────────────────────────────────
+// 1. Save screenshots as images/ai/<id>/01.jpg, 02.jpg, ...
+// 2. Add one object to PROJECTS, with one caption per screenshot.
+// 3. Once a repo is public, add { label: "See the code", url, icon: "github" }
+//    to `links` and drop the "private for now" line from `status`.
+// ─────────────────────────────────────────────────────────────
+
+const PROJECT_DEFAULTS = { wide: true, itemNoun: "screenshot", behindLabel: "Behind the build" };
+
+const PROJECTS = [
+  {
+    ...PROJECT_DEFAULTS,
+    id: "shutter-quest",
+    title: "Shutter Quest: Afterlight",
+    category: "A game that teaches photography",
+    note: "A 3D game you play in the browser. A ruined city, six dying elements, and one old camera that can bring them back with the right photo.",
+    status: "The code is private on GitHub for now.",
+    perspective: "It's Meridian, twelve years after the Withering. Light, water, air, green, life and the stars are all dying, and your grandmother's old camera, Iris, is the only thing that still remembers them. Each of the six districts teaches one real camera skill: composition and exposure on a railway above the ash in Ashfield, shutter speed in a flooded metro street, aperture and ISO in a night market lit by lanterns, close focus in a cracked glass dome, telephoto and stealth with the animals of the Feral Quarter, and long exposure on a blackout rooftop under the Spire. Iris walks you through each lesson, then a boss tests it. There's a field guide with steps for all 24 shots, and every knowledge card ends with a challenge to try with a real camera or phone.",
+    captions: ["Title screen", "Ashfield: bring back the light", "The Sunken Line: bring back the water", "The Mask Market through the viewfinder", "The Withered Dome: bring back the green", "The Feral Quarter: bring back life", "The city of Meridian", "Three difficulty levels", "Main menu", "The field guide"],
+    images: frames("ai/shutter-quest", 10),
+  },
+  {
+    ...PROJECT_DEFAULTS,
+    id: "hr-dashboard",
+    title: "HR Operations Dashboard",
+    category: "People operations in one view",
+    note: "Load one Excel workbook and get eleven views of hiring, exits, background checks, onboarding and HR actions, plus a brief for leadership.",
+    status: "Every screenshot uses made up sample data. The code is private on GitHub for now.",
+    perspective: "This one is close to my day job. HR data usually lives in a pile of spreadsheets, so the dashboard reads one Excel workbook for one team or company and turns it into eleven views: headcount and attrition, exits, background checks, 30, 60 and 90 day connects, onboarding, probation, the helpdesk and weekly HR actions. The Executive tab picks out what needs fixing first, like checks past their deadline or probation decisions that are overdue. The Leadership Brief turns it all into slides you can download as PowerPoint or PDF, with no employee names in them. It runs in the browser, so an uploaded workbook stays on your computer.",
+    captions: ["Executive: what needs fixing first", "Workforce: headcount and attrition", "Exits and retention", "Background checks for each employee", "Helpdesk cases and deadlines", "Weekly HR actions by stage", "Leadership Brief, ready as PowerPoint or PDF", "Source Intelligence: where every number comes from"],
+    images: frames("ai/hr-dashboard", 8),
+  },
+  {
+    ...PROJECT_DEFAULTS,
+    id: "portfolio",
+    title: "raghavapramod.com",
+    category: "The site you're on",
+    note: "My photos, articles and music in one place. Plain HTML, CSS and JavaScript, with no framework.",
+    status: "You're looking at it. The code is private on GitHub for now.",
+    perspective: "It's built to put the photos first. My shots starts with a photo of a real lens, with a focal length for each kind of shot I take: 85 for people, 35 for streets, 24 for facades. Pick one and those photos drop in, each set with a note on how I shot it. Music has my Spotify playlists and a song I pick each week, and Articles collects what I've written on LinkedIn. Publishing takes one double click on my Mac. It saves the changes, backs them up to GitHub and puts the site live.",
+    captions: ["Home", "My shots: pick a focal length", "A photo series with the story behind it", "The full size photo viewer", "AI Pill, this page", "Music", "Articles", "Say hi", "On a phone"],
+    images: frames("ai/portfolio", 9),
+  },
+];
+
+function renderProjects() {
+  const list = document.getElementById("projects-list");
+  if (!list) return;
+  PROJECTS.forEach((project) => list.appendChild(buildStoryCard(project)));
 }
 
 // ---------------------------------------------------------------
@@ -947,6 +1013,7 @@ document.addEventListener("DOMContentLoaded", () => {
   renderLensDial();
   renderShotsPage();
   renderArticles();
+  renderProjects();
   renderPlaylists();
   renderSongLog();
   initLightbox();
