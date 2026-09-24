@@ -775,7 +775,7 @@ const PROJECTS = [
     title: "Shutter Quest: Afterlight",
     category: "A game that teaches photography",
     note: "A 3D game you play in the browser. A ruined city, six dying elements, and one old camera that can bring them back with the right photo.",
-    status: "The code is private on GitHub for now.",
+    links: [{ label: "See the code", url: "https://github.com/raghavapramodr-aipilled/shutter-quest", icon: "github" }],
     perspective: "It's Meridian, twelve years after the Withering. Light, water, air, green, life and the stars are all dying, and your grandmother's old camera, Iris, is the only thing that still remembers them. Each of the six districts teaches one real camera skill: composition and exposure on a railway above the ash in Ashfield, shutter speed in a flooded metro street, aperture and ISO in a night market lit by lanterns, close focus in a cracked glass dome, telephoto and stealth with the animals of the Feral Quarter, and long exposure on a blackout rooftop under the Spire. Iris walks you through each lesson, then a boss tests it. There's a field guide with steps for all 24 shots, and every knowledge card ends with a challenge to try with a real camera or phone.",
     captions: ["Title screen", "Ashfield: bring back the light", "The Sunken Line: bring back the water", "The Mask Market through the viewfinder", "The Withered Dome: bring back the green", "The Feral Quarter: bring back life", "The city of Meridian", "Three difficulty levels", "Main menu", "The field guide"],
     images: frames("ai/shutter-quest", 10),
