@@ -40,7 +40,7 @@ STAGE="$(mktemp -d)"
 trap 'rm -rf "$STAGE"' EXIT
 git archive HEAD | tar -x -C "$STAGE"
 rm -f "$STAGE/deploy.sh" "$STAGE/.gitignore"
-(cd "$STAGE" && netlify deploy --prod --no-build --dir . --site "$SITE_ID" --message "$MSG")
+(cd "$STAGE" && netlify deploy --prod --no-build --dir . --site "$SITE_ID" --message "${MSG%%$'\n'*}")
 
 git rev-parse HEAD > .git/last-deployed
 echo "Live at https://raghavapramod.com"
