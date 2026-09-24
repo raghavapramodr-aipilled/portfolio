@@ -1,0 +1,4 @@
+# GitHub only: kept out of the deployed site (deploy.sh uses git archive)
+README.md export-ignore
+screenshots/ export-ignore
+.gitattributes export-ignore
