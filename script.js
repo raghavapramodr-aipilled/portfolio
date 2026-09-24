@@ -59,9 +59,9 @@ const STORIES = [
     instagramUrl: "https://www.instagram.com/raghavapramod/p/DbLhh34AQnA/",
     title: "What if Christopher Nolan directed my life?",
     category: "The one where I got carried away",
-    note: "All shot on my phone. I did my own Joker face paint for this one, so judge the eyeliner gently.",
+    note: "All shot on my phone. The Joker is someone I photographed in full makeup on Halloween.",
     behindTheShot: true,
-    perspective: "This is the most fun I've had shooting anything. It started with a silly question: what if my life was a Nolan film? It turned into a full poster series, all shot on my phone. For the Dark Knight poster, I did my own Joker face paint (first and last time, my bathroom mirror will confirm) and blurred the buildings behind me so your eye goes straight to the face. For Inception, I shot an office building straight up, then flipped and mirrored it until the sky looked like it was folding in on itself. Tenet is the one I'm proudest of. It's a double exposure of me, once upright and once upside down, to get that forward and backward feeling without any filters. Oppenheimer is a bottle of cold brew lit from below in a dark room. Sometimes 'the bomb' is just good backlighting and a steady hand. Dunkirk and Odyssey are travel photos that already had the mood. I didn't have to try for those.",
+    perspective: "This is the most fun I've had shooting anything. It started with a silly question: what if my life was a Nolan film? It turned into a full poster series, all shot on my phone. For the Dark Knight poster, I photographed someone in Joker makeup on Halloween and blurred the buildings behind them so your eye goes straight to the face. For Inception, I shot an office building straight up, then flipped and mirrored it until the sky looked like it was folding in on itself. Tenet is the one I'm proudest of. It's a double exposure of me, once upright and once upside down, to get that forward and backward feeling without any filters. Oppenheimer is a bottle of cold brew lit from below in a dark room. Sometimes 'the bomb' is just good backlighting and a steady hand. Dunkirk and Odyssey are travel photos that already had the mood. I didn't have to try for those.",
     images: frames("nolan", 9),
   },
   {
