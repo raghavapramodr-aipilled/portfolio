@@ -26,7 +26,9 @@
   to = "/contact.html"
   status = 200
 
-# Images never change once published; CSS/JS are cache-busted with ?v=
+# Photos never change once published; CSS/JS are cache-busted with ?v=.
+# AI Pill screenshots live in /projects instead, so browsers recheck them
+# (Netlify's default) and retaken screenshots show up straight away.
 [[headers]]
   for = "/images/*"
   [headers.values]

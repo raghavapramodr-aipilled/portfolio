@@ -45,6 +45,7 @@ Plain HTML, CSS and JavaScript, with no framework and no build step.
 | `script.js` | Photo series and project data, and all page behaviour |
 | `styles.css` | Styles for every page |
 | `images/` | The photos |
+| `projects/` | AI Pill screenshots |
 | `netlify.toml` | Netlify settings: short page links and image caching |
 | `deploy.sh` | Publishes the site |
 

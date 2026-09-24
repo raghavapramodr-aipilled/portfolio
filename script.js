@@ -760,13 +760,19 @@ function renderArticles() {
 // ─────────────────────────────────────────────────────────────
 // HOW TO ADD A PROJECT
 // ─────────────────────────────────────────────────────────────
-// 1. Save screenshots as images/ai/<id>/01.jpg, 02.jpg, ...
+// 1. Save screenshots as projects/<folder>/01.jpg, 02.jpg, ...
+//    (not under images/: that folder is cached for a year, so a
+//    retaken screenshot with the same name would never show up)
 // 2. Add one object to PROJECTS, with one caption per screenshot.
 // 3. Once a repo is public, add { label: "See the code", url, icon: "github" }
 //    to `links` and drop the "private for now" line from `status`.
 // ─────────────────────────────────────────────────────────────
 
 const PROJECT_DEFAULTS = { wide: true, itemNoun: "screenshot", behindLabel: "Behind the build" };
+
+function screens(folder, count) {
+  return frames(folder, count).map((src) => src.replace(/^images\//, "projects/"));
+}
 
 const PROJECTS = [
   {
@@ -778,7 +784,7 @@ const PROJECTS = [
     links: [{ label: "See the code", url: "https://github.com/raghavapramodr-aipilled/shutter-quest", icon: "github" }],
     perspective: "It's Meridian, twelve years after the Withering. Light, water, air, green, life and the stars are all dying, and your grandmother's old camera, Iris, is the only thing that still remembers them. Each of the six districts teaches one real camera skill: composition and exposure on a railway above the ash in Ashfield, shutter speed in a flooded metro street, aperture and ISO in a night market lit by lanterns, close focus in a cracked glass dome, telephoto and stealth with the animals of the Feral Quarter, and long exposure on a blackout rooftop under the Spire. Iris walks you through each lesson, then a boss tests it. There's a field guide with steps for all 24 shots, and every knowledge card ends with a challenge to try with a real camera or phone.",
     captions: ["Title screen", "Ashfield: bring back the light", "The Sunken Line: bring back the water", "The Mask Market through the viewfinder", "The Withered Dome: bring back the green", "The Feral Quarter: bring back life", "The city of Meridian", "Three difficulty levels", "Main menu", "The field guide"],
-    images: frames("ai/shutter-quest", 10),
+    images: screens("afterlight", 10),
   },
   {
     ...PROJECT_DEFAULTS,
@@ -789,7 +795,7 @@ const PROJECTS = [
     status: "Every screenshot uses made up sample data. The code is private on GitHub for now.",
     perspective: "This one is close to my day job. HR data usually lives in a pile of spreadsheets, so the dashboard reads one Excel workbook for one team or company and turns it into eleven views: headcount and attrition, exits, background checks, 30, 60 and 90 day connects, onboarding, probation, the helpdesk and weekly HR actions. The Executive tab picks out what needs fixing first, like checks past their deadline or probation decisions that are overdue. The Leadership Brief turns it all into slides you can download as PowerPoint or PDF, with no employee names in them. It runs in the browser, so an uploaded workbook stays on your computer.",
     captions: ["Executive: what needs fixing first", "Workforce: headcount and attrition", "Exits and retention", "Background checks for each employee", "Helpdesk cases and deadlines", "Weekly HR actions by stage", "Leadership Brief, ready as PowerPoint or PDF", "Source Intelligence: where every number comes from"],
-    images: frames("ai/hr-dashboard", 8),
+    images: screens("hr-dashboard", 8),
   },
   {
     ...PROJECT_DEFAULTS,
@@ -801,7 +807,7 @@ const PROJECTS = [
     status: "You're looking at it.",
     perspective: "It's built to put the photos first. My shots starts with a photo of a real lens, with a focal length for each kind of shot I take: 85 for people, 35 for streets, 24 for facades. Pick one and those photos drop in, each set with a note on how I shot it. Music has my Spotify playlists and a song I pick each week, and Articles collects what I've written on LinkedIn. Publishing takes one double click on my Mac. It saves the changes, backs them up to GitHub and puts the site live.",
     captions: ["Home", "My shots: pick a focal length", "A photo series with the story behind it", "The full size photo viewer", "AI Pill, this page", "Music", "Articles", "Say hi", "On a phone"],
-    images: frames("ai/portfolio", 9),
+    images: screens("site", 9),
   },
 ];
 
