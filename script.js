@@ -1,0 +1,884 @@
+// Raghava Pramod — personal site
+// Story data model: one Instagram post = one complete carousel.
+// The home page (index.html) shows a lens-dial of 6 genres; clicking
+// one opens shots.html?genre=<id>, which lists every story in that
+// genre as a card: title/info | scrollable carousel | behind-the-shot
+// write-up. Visiting shots.html with no genre shows everything,
+// grouped by genre. This file is loaded by both pages — each render
+// function no-ops if its container isn't on the current page.
+//
+// ─────────────────────────────────────────────────────────────
+// HOW TO ADD A NEW POST
+// ─────────────────────────────────────────────────────────────
+// 1. Save the post's photos as images/<folder>/01.jpg, 02.jpg, ...
+//    (sequential, zero-padded, matching the order they appear in
+//    the Instagram carousel — every image in the post, not a subset).
+// 2. Add one object to the STORIES array below, with a `genre` that
+//    matches one of the GENRES ids below.
+// 3. Add a `perspective` write-up — the longer, first-person
+//    paragraph about technique/perspective, shown in the "Behind the
+//    shot" column next to the carousel on shots.html.
+// ─────────────────────────────────────────────────────────────
+
+/**
+ * @typedef {Object} Story
+ * @property {string} id
+ * @property {string} genre           must match a GENRES id
+ * @property {string} instagramUrl
+ * @property {string} title
+ * @property {string} category
+ * @property {string} note            short line shown next to the carousel
+ * @property {boolean} behindTheShot  legacy flag, currently unused (every story shows its perspective on shots.html)
+ * @property {string} [perspective]   longer first-person write-up shown in the "Behind the shot" column
+ * @property {string[]} [behindThumbs] curated clean thumbnail picks — not currently rendered, kept for future use
+ * @property {string[]} images
+ */
+
+function frames(folder, count) {
+  return Array.from({ length: count }, (_, i) => {
+    const n = String(i + 1).padStart(2, "0");
+    return `images/${folder}/${n}.jpg`;
+  });
+}
+
+/** @type {{id: string, label: string, focal: number, desc: string}[]} */
+const GENRES = [
+  { id: "people", label: "People", focal: 85, desc: "Nolan-poster self-portraits, strangers boxed in by city frames, and portraits from the archive." },
+  { id: "streets", label: "Streets", focal: 35, desc: "Wandering with no plan, chasing whatever colour stops me first." },
+  { id: "facades", label: "Facades", focal: 24, desc: "A week of hunting for curves, and the symmetry of Bara Imambara." },
+  { id: "light-objects", label: "Light & Objects", focal: 50, desc: "Long exposures and light-painting: what one source does to a dark room." },
+  { id: "concepts", label: "Concepts", focal: 100, desc: "Split frames: sun and moon, two cities, two statues side by side." },
+  { id: "technique", label: "Technique", focal: 135, desc: "My composition cheat sheet, and subject anchoring explained." },
+];
+
+/** @type {Story[]} */
+const STORIES = [
+  {
+    id: "nolan",
+    genre: "people",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/DbLhh34AQnA/",
+    title: "What if Christopher Nolan directed my life?",
+    category: "The one where I got carried away",
+    note: "All shot on my phone. I did my own Joker face paint for this one, so judge the eyeliner gently.",
+    behindTheShot: true,
+    perspective: "This is probably the most fun I've had shooting anything. It started as a dumb question — what if the world around me was actually a Nolan film? — and turned into a full poster series shot entirely on a phone. For the Joker/Dark Knight poster I did my own face paint (first and last time, my bathroom mirror will confirm) and had the buildings behind me thrown out of focus so your eye has nowhere to go but the face. The Inception one is just an office building shot straight up with the phone, then flipped and mirrored until the sky looked like it was folding in on itself — no editing trickery beyond that. Tenet's the one I'm proudest of: a double exposure with myself shot twice, once normal and once inverted, to get that 'moving forward and backward at once' feeling without any effects filters. Oppenheimer is a bottle of cold brew lit from below in a dark room — sometimes 'the bomb' is just good backlighting and a steady hand. And the Dunkirk and Odyssey shots are just travel photos that already had the mood, I didn't even have to try for those.",
+    images: frames("nolan", 9),
+  },
+  {
+    id: "composition",
+    genre: "technique",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/DX9dPskgfzy/",
+    title: "My cheat sheet for composition",
+    category: "The one that's basically a tutorial",
+    note: "I put together every composition rule I actually use, with a real photo for each one.",
+    behindTheShot: true,
+    perspective: "I made this one as much for myself as for anyone else. It's a running list of the composition rules I actually reach for, each paired with a photo where I used it. There's the rule of thirds on a drink at a bar table. A door and a stool are split cleanly down the middle for 'vertical half and half.' Then I go through leading lines, frame-within-a-frame, and diagonals one by one. None of it is complicated. Most of the time, I just pause for two extra seconds before taking the shot and ask where the eye is going to land first.",
+    images: frames("composition", 20),
+  },
+  {
+    id: "framing",
+    genre: "people",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/DbFloqJAYiS/",
+    title: "For the love of framing",
+    category: "People, through the frames a city gives you",
+    note: "Shot in monochrome so the shapes do the talking instead of the colours.",
+    behindTheShot: true,
+    perspective: "I'm a sucker for a frame within a frame — windows, doorways, the gap between two buildings, anything that lets me box a person into the shot without them knowing I did it. This whole set is street photography where the 'frame' already existed before I showed up; I just had to notice it and wait for someone to walk into it. I shot it in black and white on purpose, because colour would've distracted from the actual shapes doing the work.",
+    behindThumbs: ["images/framing/03.jpg", "images/framing/06.jpg", "images/framing/05.jpg"],
+    images: frames("framing", 7),
+  },
+  {
+    id: "light",
+    genre: "light-objects",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/Dbfo3-egagR/",
+    title: "Let there be",
+    category: "Playing with light in the dark",
+    note: "No people in this one, just what light does to a room before anything else happens in it.",
+    behindTheShot: true,
+    perspective: "This is my light-painting and long-exposure set. Chiaroscuro is the fancy word for it, but really I just turned the lights off to see what happened when a single source hit something interesting. The LED strip patterns, the ceiling light shot dead-on, and the circular light trails are mostly long exposures. I moved a light source through the frame while the shutter stayed open. It's slow, deliberate shooting, which feels very different from the way I usually shoot street stuff while moving.",
+    behindThumbs: ["images/light/08.jpg", "images/light/04.jpg", "images/light/06.jpg"],
+    images: frames("light", 10),
+  },
+  {
+    id: "curved",
+    genre: "facades",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/DYXJbnNAUg2/",
+    title: "The world doesn't move in straight lines",
+    category: "A week of hunting for curves",
+    note: "I gave myself one rule for a week: no straight lines allowed in the frame.",
+    behindTheShot: true,
+    perspective: "I set myself a small challenge with this one. For a while, I could only shoot curves. No straight horizons and no straight edges if I could help it. I found neon signage bent into an arc, a tunnel ceiling, and a yellow sculpture reaching up. I was chasing the s-curve and the arc wherever they appeared. It's a good exercise if you shoot a lot of architecture like I do. Straight lines and grids get easy fast, while curves make you think properly about where you're standing.",
+    behindThumbs: ["images/curved/13.jpg", "images/curved/06.jpg", "images/curved/12.jpg"],
+    images: frames("curved", 16),
+  },
+  {
+    id: "duality",
+    genre: "concepts",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/DYccQa4AdBd/",
+    title: "Harmony found in the divide",
+    category: "Two halves, one frame",
+    note: "Split-frame shots with the sun and moon, two cities, and two statues sitting side by side.",
+    behindTheShot: true,
+    perspective: "This one's a juxtaposition set. I split each frame straight down the middle and put two contrasting things on either side. The sun bleeds into the moon in the same sky. A Hyderabad sunrise sits beside a Goa evening. Two carved figures, one polished and one made of raw wood, are stitched together. It isn't really about one clever shot. It's about noticing that two separate photos placed side by side can say something neither of them says alone.",
+    behindThumbs: ["images/duality/02.jpg", "images/duality/03.jpg"],
+    images: frames("duality", 6),
+  },
+  {
+    id: "streetcolors",
+    genre: "streets",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/DVn-7-ICOil/",
+    title: "Where the colours were louder than the streets",
+    category: "Just wandering with my phone out",
+    note: "No plan for this walk, just chasing whatever colour caught my eye first.",
+    behindTheShot: true,
+    perspective: "This set is just me wandering with no destination and my phone in my hand, which is probably my favourite way to shoot. I didn't have a brief or a composition challenge. I just walked until a paint colour, a market stall, or a bridge made me stop. It's the least 'technical' set here and probably the closest to how my brain actually works when I'm shooting for fun instead of following a concept.",
+    behindThumbs: ["images/streetcolors/13.jpg", "images/streetcolors/09.jpg", "images/streetcolors/12.jpg"],
+    images: frames("streetcolors", 14),
+  },
+  {
+    id: "architecture",
+    genre: "facades",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/Cj5iw9hBEyD/",
+    title: "Structural views",
+    category: "Bara Imambara, shot with nothing extra",
+    note: "No filters, no accessories — just symmetry and patience at one of Lucknow's oldest buildings.",
+    behindTheShot: true,
+    perspective: "I shot this whole set at Bara Imambara in Lucknow under my own '#withnothing' rule — no lenses, no gimbal, no filters, just the phone in my hand and however much patience it took to get the symmetry right. Old buildings like this basically hand you the composition if you're willing to stand in the right spot and wait for the frame to clear. It's less about technique and more about respecting that the building already did the hard work centuries ago.",
+    behindThumbs: ["images/architecture/04.jpg", "images/architecture/03.jpg", "images/architecture/06.jpg"],
+    images: frames("architecture", 7),
+  },
+  {
+    id: "technique",
+    genre: "technique",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/DZ7x7YUAT19/",
+    title: "Remaining constant",
+    category: "Subject anchoring, explained",
+    note: "One point stays dead still while I let everything else in the frame move or blur.",
+    behindTheShot: true,
+    perspective: "This is 'subject anchoring' — picking one point in the frame that stays perfectly sharp and still, and letting everything else move, blur, or fall out of focus around it. It's a technique I use a lot for anything with motion in it, because it gives the eye somewhere safe to land before it goes exploring the rest of the frame. Simple idea, but it took me a while to get the timing right.",
+    behindThumbs: ["images/technique/03.jpg", "images/technique/02.jpg", "images/technique/04.jpg"],
+    images: frames("technique", 7),
+  },
+  {
+    id: "portraits",
+    genre: "people",
+    instagramUrl: "https://www.instagram.com/raghavapramod/p/DUI6xTbAZIs/",
+    title: "Clicked, archived and highlighted",
+    category: "Portraits from the gallery",
+    note: "A round-up of portraits I've shot over the years, pulled out of the archive and put together in one place.",
+    behindTheShot: true,
+    perspective: "This one's less a single shoot and more a highlight reel. I went digging through years of portraits I've taken of friends and strangers and picked out the ones that still hold up. Some are lit and planned, like the one against the orange backdrop. Others are just someone caught mid-laugh or mid-thought with whatever light was around at the time. What ties them together isn't the setup, it's that in each one the person actually looks like themselves and not like they're posing for a camera.",
+    behindThumbs: ["images/portraits/06.jpg"],
+    images: frames("portraits", 9),
+  },
+];
+
+// ---------------------------------------------------------------
+// Icons
+// ---------------------------------------------------------------
+
+function svgIcon(name) {
+  const icons = {
+    chevronLeft: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+    chevronRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>',
+    close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    instagram: '<svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>',
+    layers: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="3" width="14" height="14" rx="2"></rect><path d="M3 7v12a2 2 0 0 0 2 2h12"></path></svg>',
+    linkedin: '<svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>',
+    spotify: '<svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M7 9.2c3.2-1 7-.7 9.6 1"></path><path d="M7.6 12.6c2.7-.8 5.9-.5 8.1 1"></path><path d="M8.3 15.8c2.1-.6 4.5-.4 6.2.9"></path></svg>',
+  };
+  return icons[name] || "";
+}
+
+// ---------------------------------------------------------------
+// Render: lens dial (lives on shots.html). A photo of a real lens
+// sits in the middle; a rotating scale ring around it carries a
+// focal length per genre. Hovering a focal length branches its
+// genre callout out on a leader line; moving away retracts it back
+// into the ring. Clicking a focal length dials the ring to it.
+// Clicking a callout jumps to that genre's shots.
+// ---------------------------------------------------------------
+
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+function normalizeRotationDelta(current, target) {
+  let delta = (target - current) % 360;
+  if (delta > 180) delta -= 360;
+  if (delta < -180) delta += 360;
+  return delta;
+}
+
+function renderLensDial() {
+  const lens = document.getElementById("lens");
+  const scale = document.getElementById("lens-scale");
+  const genresEl = document.getElementById("lens-genres");
+  const svg = document.getElementById("lens-lines");
+  if (!lens || !scale || !genresEl || !svg) return;
+
+  const R_MARK = 30;
+  const R_LINE_START = 34;
+  const R_ELBOW = 41;
+  const R_LABEL = 43;
+  const step = 360 / GENRES.length;
+  let currentRotation = 0;
+  let hideTimer = null;
+
+  const marks = [];
+  const callouts = [];
+  const lines = [];
+  const dots = [];
+
+  GENRES.forEach((genre, i) => {
+    const deg = -90 + step * i;
+    const rad = (deg * Math.PI) / 180;
+    const side = i < 3 ? "right" : "left";
+
+    // focal length mark, sits on the rotating scale ring
+    const markX = 50 + R_MARK * Math.cos(rad);
+    const markY = 50 + R_MARK * Math.sin(rad);
+    const mark = document.createElement("button");
+    mark.type = "button";
+    mark.className = "lens-mark";
+    mark.style.left = `${markX}%`;
+    mark.style.top = `${markY}%`;
+    mark.setAttribute("aria-label", `${genre.label}, ${genre.focal}mm. Hover to preview, tap to dial it in.`);
+    const cs = Math.cos(rad), sn = Math.sin(rad);
+    const titlePos = Math.abs(cs) < 0.2 ? (sn < 0 ? "above" : "below") : (cs > 0 ? "right" : "left");
+    mark.innerHTML = `<span class="lens-mark-inner">${genre.focal}<span class="lens-mark-title lens-mark-title--${titlePos}" aria-hidden="true">${genre.label}</span></span>`;
+    scale.appendChild(mark);
+    marks.push(mark);
+
+    // leader line: anchor on the ring -> elbow along the same angle -> horizontal run to the callout
+    const ax = 50 + R_LINE_START * Math.cos(rad);
+    const ay = 50 + R_LINE_START * Math.sin(rad);
+    const ex = 50 + R_ELBOW * Math.cos(rad);
+    const ey = 50 + R_ELBOW * Math.sin(rad);
+    const lx = side === "right" ? 50 + R_LABEL : 50 - R_LABEL;
+    const ly = ey;
+
+    // dotted leader line: a run of dots that light up one after another
+    const dotsG = document.createElementNS(SVG_NS, "g");
+    dotsG.setAttribute("class", "lens-dotline");
+    const pts = [[ax, ay], [ex, ey], [lx, ly]];
+    const GAP = 1.1;
+    let n = 0;
+    for (let q = 0; q < 2; q++) {
+      const [x1, y1] = pts[q], [x2, y2] = pts[q + 1];
+      const segLen = Math.hypot(x2 - x1, y2 - y1);
+      for (let k = q === 0 ? 1 : 0; k * GAP <= segLen; k++) {
+        const t = (k * GAP) / segLen;
+        const c = document.createElementNS(SVG_NS, "circle");
+        c.setAttribute("cx", String(x1 + (x2 - x1) * t));
+        c.setAttribute("cy", String(y1 + (y2 - y1) * t));
+        c.setAttribute("r", "0.22");
+        c.style.transitionDelay = `${n++ * 14}ms`;
+        dotsG.appendChild(c);
+      }
+    }
+    svg.appendChild(dotsG);
+    lines.push(dotsG);
+
+    const dot = document.createElementNS(SVG_NS, "circle");
+    dot.setAttribute("cx", String(ax));
+    dot.setAttribute("cy", String(ay));
+    dot.setAttribute("r", "0.8");
+    dot.setAttribute("class", "lens-dot");
+    svg.appendChild(dot);
+    dots.push(dot);
+
+    // the callout itself — hidden until its mark (or itself) is hovered/focused
+    const link = document.createElement("a");
+    link.className = `lens-genre lens-genre--${side}`;
+    link.href = `#genre-${genre.id}`;
+    link.style.left = `${lx}%`;
+    link.style.top = `${ly}%`;
+    link.innerHTML = `
+      <span class="lens-genre-label">${genre.label}</span>
+      <span class="lens-genre-desc">${genre.desc}</span>
+    `;
+    genresEl.appendChild(link);
+    callouts.push(link);
+  });
+
+  function branchOut(index) {
+    clearTimeout(hideTimer);
+    marks.forEach((m, i) => m.classList.toggle("is-hover", i === index));
+    callouts.forEach((c, i) => c.classList.toggle("is-open", i === index));
+    lines.forEach((g, i) => g.classList.toggle("is-open", i === index));
+    marks.forEach((m, i) => m.classList.toggle("is-open", i === index));
+    dots[index].classList.add("is-open");
+  }
+
+  function scheduleMinimise() {
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => {
+      marks.forEach((m) => m.classList.remove("is-hover"));
+      callouts.forEach((c) => c.classList.remove("is-open"));
+      lines.forEach((g) => g.classList.remove("is-open"));
+      marks.forEach((m) => m.classList.remove("is-open"));
+      dots.forEach((d) => d.classList.remove("is-open"));
+    }, 160);
+  }
+
+  let lastRotated = -1;
+
+  function setActive(index) {
+    marks.forEach((m, i) => m.classList.toggle("is-active", i === index));
+    callouts.forEach((c, i) => c.classList.toggle("is-active", i === index));
+    lastRotated = index;
+  }
+
+  function rotateTo(index) {
+    setActive(index);
+    branchOut(index);
+  }
+
+  function rotateToLegacy(index) {
+    const target = -step * index;
+    currentRotation += normalizeRotationDelta(currentRotation % 360, target);
+    scale.style.transform = `rotate(${currentRotation}deg)`;
+    marks.forEach((m) => {
+      const inner = m.querySelector(".lens-mark-inner");
+      inner.style.transform = `rotate(${-currentRotation}deg)`;
+    });
+    setActive(index);
+    branchOut(index);
+  }
+
+  marks.forEach((mark, i) => {
+    mark.addEventListener("mouseenter", () => branchOut(i));
+    mark.addEventListener("focus", () => branchOut(i));
+    mark.addEventListener("mouseleave", scheduleMinimise);
+    mark.addEventListener("blur", scheduleMinimise);
+    mark.addEventListener("click", () => {
+      rotateTo(i);
+      lens.classList.add("has-pick");
+      openGenreSection(GENRES[i].id);
+    });
+  });
+  callouts.forEach((callout, i) => {
+    callout.addEventListener("mouseenter", () => branchOut(i));
+    callout.addEventListener("focus", () => branchOut(i));
+    callout.addEventListener("mouseleave", scheduleMinimise);
+    callout.addEventListener("blur", scheduleMinimise);
+    callout.addEventListener("click", (e) => {
+      e.preventDefault();
+      rotateTo(i);
+      lens.classList.add("has-pick");
+      openGenreSection(GENRES[i].id);
+    });
+  });
+
+  // touch screens have no hover: a tap on the lens itself reveals the focal lengths
+  lens.addEventListener("click", (e) => {
+    if (!e.target.closest(".lens-mark, .lens-genre")) lens.classList.add("is-open");
+  });
+
+  lens.classList.add("is-live");
+}
+
+// ---------------------------------------------------------------
+// Render: "My shots" carousel cards on shots.html — filtered to a
+// genre (via ?genre=<id>), or grouped by genre when none is given.
+// Each card: title/info | scrollable carousel | behind-the-shot copy.
+// ---------------------------------------------------------------
+
+function buildStoryCard(story) {
+  const card = document.createElement("article");
+  card.className = "story reveal";
+  card.id = `story-${story.id}`;
+  card.setAttribute("aria-labelledby", `story-title-${story.id}`);
+
+  const info = document.createElement("div");
+  info.className = "story-info";
+  info.innerHTML = `
+    <span class="eyebrow">${story.category}</span>
+    <h3 class="story-title" id="story-title-${story.id}">${story.title}</h3>
+    <p class="story-note">${story.note}</p>
+    <a class="ig-link" href="${story.instagramUrl}" target="_blank" rel="noopener noreferrer">
+      See the original post ${svgIcon("instagram")}
+    </a>
+  `;
+
+  const railWrap = document.createElement("div");
+  railWrap.className = "rail-wrap";
+
+  const rail = document.createElement("div");
+  rail.className = "rail";
+  rail.setAttribute("role", "region");
+  rail.setAttribute("aria-label", `Photographs from "${story.title}"`);
+  rail.tabIndex = 0;
+
+  story.images.forEach((src, i) => {
+    const btn = document.createElement("button");
+    btn.className = "rail-card";
+    btn.type = "button";
+    btn.setAttribute("aria-label", `Open photograph from "${story.title}" at full size`);
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = `${story.title} — a photograph from the sequence`;
+    img.loading = i < 2 ? "eager" : "lazy";
+    img.decoding = "async";
+    btn.appendChild(img);
+    btn.addEventListener("click", () => openLightbox(story, i));
+    rail.appendChild(btn);
+  });
+
+  const controls = document.createElement("div");
+  controls.className = "rail-controls";
+  const prevBtn = document.createElement("button");
+  prevBtn.className = "rail-btn";
+  prevBtn.type = "button";
+  prevBtn.setAttribute("aria-label", `Scroll "${story.title}" backward`);
+  prevBtn.innerHTML = svgIcon("chevronLeft");
+  const nextBtn = document.createElement("button");
+  nextBtn.className = "rail-btn";
+  nextBtn.type = "button";
+  nextBtn.setAttribute("aria-label", `Scroll "${story.title}" forward`);
+  nextBtn.innerHTML = svgIcon("chevronRight");
+
+  function step(dir) {
+    const card2 = rail.querySelector(".rail-card");
+    const cardWidth = card2 ? card2.getBoundingClientRect().width : 400;
+    const gap = parseFloat(getComputedStyle(rail).gap) || 0;
+    rail.scrollBy({ left: dir * (cardWidth + gap), behavior: "smooth" });
+  }
+  prevBtn.addEventListener("click", () => step(-1));
+  nextBtn.addEventListener("click", () => step(1));
+
+  function updateControls() {
+    const max = rail.scrollWidth - rail.clientWidth - 2;
+    prevBtn.disabled = rail.scrollLeft <= 2;
+    nextBtn.disabled = rail.scrollLeft >= max;
+  }
+  rail.addEventListener("scroll", () => {
+    window.requestAnimationFrame(updateControls);
+  }, { passive: true });
+
+  rail.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
+  });
+
+  controls.appendChild(prevBtn);
+  controls.appendChild(nextBtn);
+
+  railWrap.appendChild(rail);
+  railWrap.appendChild(controls);
+
+  const behind = document.createElement("div");
+  behind.className = "story-behind";
+  behind.innerHTML = `
+    <span class="eyebrow">Behind the shot</span>
+    <p class="shot-perspective">${story.perspective || ""}</p>
+  `;
+
+  card.appendChild(info);
+  card.appendChild(railWrap);
+  card.appendChild(behind);
+
+  requestAnimationFrame(updateControls);
+  initRailActiveState(rail);
+
+  return card;
+}
+
+function renderShotsPage() {
+  const list = document.getElementById("shots-list");
+  if (!list) return;
+  const heading = document.getElementById("shots-heading");
+  const intro = document.getElementById("shots-intro");
+  if (heading) heading.textContent = "My shots";
+  if (intro) {
+    intro.textContent = "Everything, grouped the way I shoot it. Straight from my Instagram, every photo in every carousel, nothing trimmed.";
+  }
+
+  GENRES.forEach((genre) => {
+    const matches = STORIES.filter((s) => s.genre === genre.id);
+    if (!matches.length) return;
+    const section = document.createElement("section");
+    section.className = "genre-section";
+    section.id = `genre-${genre.id}`;
+    section.hidden = true;
+    section.setAttribute("aria-labelledby", `genre-heading-${genre.id}`);
+    section.innerHTML = `
+      <div class="genre-head">
+        <h3 class="shots-group-heading" id="genre-heading-${genre.id}">${genre.label}</h3>
+        <span class="genre-focal">${genre.focal}mm</span>
+        <p class="genre-desc">${genre.desc}</p>
+      </div>
+    `;
+    matches.forEach((story) => section.appendChild(buildStoryCard(story)));
+    list.appendChild(section);
+  });
+
+  // a link like shots.html?genre=people (or #genre-people) opens that section straight away
+  const params = new URLSearchParams(window.location.search);
+  const fromUrl = params.get("genre") || (window.location.hash.startsWith("#genre-") ? window.location.hash.slice(7) : null);
+  if (fromUrl && GENRES.some((g) => g.id === fromUrl)) openGenreSection(fromUrl, { scroll: false });
+}
+
+// Only one genre section is open at a time. Opening one hides the rest,
+// drops the chosen one down into place and scrolls it into view.
+function openGenreSection(genreId, { scroll = true } = {}) {
+  const list = document.getElementById("shots-list");
+  if (!list) return;
+  const empty = document.getElementById("shots-empty");
+  if (empty) empty.hidden = true;
+  list.querySelectorAll(".genre-section").forEach((section) => {
+    const isTarget = section.id === `genre-${genreId}`;
+    if (!isTarget) {
+      section.hidden = true;
+      section.classList.remove("is-dropping");
+      return;
+    }
+    section.hidden = false;
+    section.classList.remove("is-dropping");
+    void section.offsetWidth; // restart the drop animation
+    section.classList.add("is-dropping");
+    section.querySelectorAll(".rail").forEach((rail) => rail.dispatchEvent(new Event("scroll")));
+    section.querySelectorAll(".reveal").forEach((el) => el.classList.add("is-visible"));
+    if (scroll) {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      requestAnimationFrame(() => section.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }));
+    }
+  });
+  if (history.replaceState) history.replaceState(null, "", `#genre-${genreId}`);
+}
+
+// ---------------------------------------------------------------
+// Carousel active-card transition: the card mostly in view gets
+// full focus (scale/opacity); neighbours recede.
+// ---------------------------------------------------------------
+
+function initRailActiveState(rail) {
+  if (!("IntersectionObserver" in window)) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      entry.target.classList.toggle("is-active", entry.intersectionRatio > 0.6);
+    });
+  }, { root: rail, threshold: [0, 0.3, 0.6, 0.9, 1] });
+  Array.from(rail.children).forEach((card) => io.observe(card));
+}
+
+// ---------------------------------------------------------------
+// Lightbox
+// ---------------------------------------------------------------
+
+let lightboxState = { story: null, index: 0 };
+let lastFocusedEl = null;
+
+function getLightboxEls() {
+  return {
+    root: document.getElementById("lightbox"),
+    img: document.getElementById("lightbox-img"),
+    caption: document.getElementById("lightbox-caption"),
+    closeBtn: document.getElementById("lightbox-close"),
+    prevBtn: document.getElementById("lightbox-prev"),
+    nextBtn: document.getElementById("lightbox-next"),
+  };
+}
+
+function openLightbox(story, index) {
+  lastFocusedEl = document.activeElement;
+  lightboxState = { story, index };
+  renderLightboxFrame();
+  const { root, closeBtn } = getLightboxEls();
+  root.classList.add("is-open");
+  root.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  closeBtn.focus();
+  document.addEventListener("keydown", onLightboxKeydown);
+}
+
+function closeLightbox() {
+  const { root } = getLightboxEls();
+  root.classList.remove("is-open");
+  root.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+  document.removeEventListener("keydown", onLightboxKeydown);
+  if (lastFocusedEl && typeof lastFocusedEl.focus === "function") {
+    lastFocusedEl.focus();
+  }
+}
+
+function renderLightboxFrame() {
+  const { img, caption } = getLightboxEls();
+  const { story, index } = lightboxState;
+  if (!story) return;
+  img.src = story.images[index];
+  img.alt = `${story.title} — full photograph, ${story.category}`;
+  caption.textContent = `${story.title} · ${story.category}`;
+}
+
+function stepLightbox(dir) {
+  const { story, index } = lightboxState;
+  if (!story) return;
+  const len = story.images.length;
+  lightboxState.index = (index + dir + len) % len;
+  renderLightboxFrame();
+}
+
+function onLightboxKeydown(e) {
+  if (e.key === "Escape") { closeLightbox(); }
+  if (e.key === "ArrowRight") { stepLightbox(1); }
+  if (e.key === "ArrowLeft") { stepLightbox(-1); }
+  if (e.key === "Tab") {
+    // simple focus trap among lightbox controls
+    const { closeBtn, prevBtn, nextBtn } = getLightboxEls();
+    const focusables = [prevBtn, nextBtn, closeBtn].filter(Boolean);
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault(); first.focus();
+    }
+  }
+}
+
+function initLightbox() {
+  const { root, closeBtn, prevBtn, nextBtn } = getLightboxEls();
+  if (!root || !closeBtn || !prevBtn || !nextBtn) return;
+  closeBtn.addEventListener("click", closeLightbox);
+  prevBtn.addEventListener("click", () => stepLightbox(-1));
+  nextBtn.addEventListener("click", () => stepLightbox(1));
+  root.addEventListener("click", (e) => {
+    if (e.target === root) closeLightbox();
+  });
+}
+
+// ---------------------------------------------------------------
+// Scroll reveal
+// ---------------------------------------------------------------
+
+function initReveal() {
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const items = document.querySelectorAll(".reveal");
+  if (prefersReduced || !("IntersectionObserver" in window)) {
+    items.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: "0px 0px -60px 0px" });
+  items.forEach((el) => io.observe(el));
+}
+
+// The three-things section replays its sequential draw-in every
+// time it's scrolled past, in either direction — not just once.
+function initPracticeReplay() {
+  const items = document.querySelectorAll(".practice");
+  if (!items.length) return;
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReduced || !("IntersectionObserver" in window)) {
+    items.forEach((el) => el.classList.add("is-visible"));
+    return;
+  }
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      entry.target.classList.toggle("is-visible", entry.isIntersecting);
+    });
+  }, { threshold: 0.2, rootMargin: "0px 0px -60px 0px" });
+  items.forEach((el) => io.observe(el));
+}
+
+// ---------------------------------------------------------------
+// Articles — pieces I've written on LinkedIn, on work/HR.
+// ─────────────────────────────────────────────────────────────
+// HOW TO ADD ONE
+// ─────────────────────────────────────────────────────────────
+// Add one object to ARTICLES: { title, url, blurb, date }.
+// `date` is a plain string like "Jan 2026" — shown as-is, newest first.
+// ─────────────────────────────────────────────────────────────
+
+/** @type {{title: string, url: string, blurb: string, date: string}[]} */
+const ARTICLES = [
+  {
+    title: "The Intersection of Industrial Design and HR: Innovation Meets People Strategy",
+    url: "https://www.linkedin.com/pulse/intersection-industrial-design-hr-innovation-meets-people-pramod-zr3pc/",
+    blurb: "What happens when you treat HR like a design problem. I get into empathy mapping, prototyping policies before you roll them out, and a few case studies on what that's actually done for companies that tried it.",
+    date: "Apr 2025",
+  },
+  {
+    title: "The Power of Organizational Culture: Good vs. Bad",
+    url: "https://www.linkedin.com/posts/raghava-pramod-16317697_organizationalculture-employeeengagement-activity-7211588359993925633-s92X",
+    blurb: "A stats-heavy one. Good culture versus bad culture, side by side, and just how much it actually moves the needle on retention, revenue, and everything in between.",
+    date: "Jun 2024",
+  },
+  {
+    title: "Foundations of Change: Why Infrastructure Is Directly Proportional to Cultural Transformation and Effectiveness",
+    url: "https://www.linkedin.com/pulse/foundations-change-why-infrastructure-directly-cultural-pramod-og4bc/",
+    blurb: "Culture change gets all the attention, but it doesn't stick without the right infrastructure behind it. This one breaks down the physical, operational, and communication pieces that actually hold a culture shift together.",
+    date: "Jan 2024",
+  },
+];
+
+function buildArticleCard(article) {
+  const card = document.createElement("a");
+  card.className = "article-card";
+  card.href = article.url;
+  card.target = "_blank";
+  card.rel = "noopener noreferrer";
+  card.innerHTML = `
+    <span class="eyebrow">${article.date}</span>
+    <h3 class="article-title">${article.title}</h3>
+    <p class="article-blurb">${article.blurb}</p>
+    <span class="ig-link article-link">Read on LinkedIn</span>
+  `;
+  return card;
+}
+
+function renderArticles() {
+  const list = document.getElementById("articles-list");
+  if (!list) return;
+  if (!ARTICLES.length) {
+    list.innerHTML = `<p class="empty-note">Nothing linked up here yet — check back soon.</p>`;
+    return;
+  }
+  ARTICLES.forEach((article) => list.appendChild(buildArticleCard(article)));
+}
+
+// ---------------------------------------------------------------
+// Music — Spotify playlists, plus a running weekly log of one song
+// and why it's in rotation.
+// ─────────────────────────────────────────────────────────────
+// HOW TO ADD A WEEKLY PICK
+// ─────────────────────────────────────────────────────────────
+// Add one object to SONGS: { date, song, artist, note, url }.
+// `url` should be a public Spotify or YouTube link to the track.
+// Newest entries first.
+// ─────────────────────────────────────────────────────────────
+
+/** @type {{name: string, url: string}[]} */
+const PLAYLISTS = [
+  { name: "Hills and Chills", url: "https://open.spotify.com/playlist/0L36vOrg5AyNCHgdsV0imm" },
+  { name: "Vibe - South", url: "https://open.spotify.com/playlist/7llWfDzONAYnjp4BOgoO4e" },
+  { name: "Vibe - North", url: "https://open.spotify.com/playlist/4xZKtnVscKzmW46VZAjXRs" },
+  { name: "City of the Sun: Complete Collection", url: "https://open.spotify.com/playlist/2aotntEEmu4JaZjBxoBrHF" },
+];
+
+/** @type {{date: string, song: string, artist: string, note: string, url: string}[]} */
+const SONGS = [];
+
+function playlistEmbedUrl(url) {
+  const id = url.split("/playlist/")[1]?.split("?")[0];
+  return `https://open.spotify.com/embed/playlist/${id}?utm_source=generator&theme=0`;
+}
+
+function buildPlaylistCard(playlist) {
+  const card = document.createElement("div");
+  card.className = "playlist-card";
+  card.innerHTML = `
+    <h3 class="playlist-title">${playlist.name}</h3>
+    <iframe
+      title="${playlist.name} on Spotify"
+      src="${playlistEmbedUrl(playlist.url)}"
+      width="100%" height="352" frameborder="0" loading="lazy"
+      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+    ></iframe>
+  `;
+  return card;
+}
+
+function renderPlaylists() {
+  const list = document.getElementById("playlists-list");
+  if (!list) return;
+  PLAYLISTS.forEach((playlist) => list.appendChild(buildPlaylistCard(playlist)));
+}
+
+function buildSongEntry(entry) {
+  const row = document.createElement("article");
+  row.className = "song-entry reveal";
+  row.innerHTML = `
+    <span class="eyebrow">${entry.date}</span>
+    <h3 class="song-title">${entry.song} <span class="song-artist">— ${entry.artist}</span></h3>
+    <p class="song-note">${entry.note}</p>
+    <a class="ig-link" href="${entry.url}" target="_blank" rel="noopener noreferrer">Listen</a>
+  `;
+  return row;
+}
+
+function renderSongLog() {
+  const list = document.getElementById("song-log-list");
+  if (!list) return;
+  if (!SONGS.length) {
+    list.innerHTML = `<p class="empty-note">Nothing logged yet — first entry's coming soon.</p>`;
+    return;
+  }
+  SONGS.forEach((entry) => list.appendChild(buildSongEntry(entry)));
+}
+
+// ---------------------------------------------------------------
+// Loader — typewriter phrase, then reveal
+// ---------------------------------------------------------------
+
+// Each page sets its own phrase via data-phrase on the loader element.
+const LOADER_PHRASE_FALLBACK = "Getting the light right.";
+
+function initLoader() {
+  const loader = document.getElementById("loader");
+  const typeEl = document.getElementById("loader-type");
+  if (!loader || !typeEl) return;
+
+  const LOADER_PHRASE = loader.dataset.phrase || LOADER_PHRASE_FALLBACK;
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function finish() {
+    loader.classList.add("is-done");
+    document.body.classList.remove("loading-lock");
+    setTimeout(() => loader.remove(), prefersReduced ? 0 : 700);
+  }
+
+  if (prefersReduced) {
+    typeEl.textContent = LOADER_PHRASE;
+    finish();
+    return;
+  }
+
+  const charDelay = 42;
+  const holdAfterType = 400;
+  let i = 0;
+
+  function typeNext() {
+    if (i <= LOADER_PHRASE.length) {
+      typeEl.textContent = LOADER_PHRASE.slice(0, i);
+      i++;
+      setTimeout(typeNext, charDelay);
+      return;
+    }
+    if (document.readyState === "complete") {
+      setTimeout(finish, holdAfterType);
+    } else {
+      window.addEventListener("load", () => setTimeout(finish, holdAfterType), { once: true });
+      setTimeout(finish, 4000); // safety net: never block the site for long
+    }
+  }
+
+  typeNext();
+}
+
+// ---------------------------------------------------------------
+// Boot
+// ---------------------------------------------------------------
+
+initLoader();
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderLensDial();
+  renderShotsPage();
+  renderArticles();
+  renderPlaylists();
+  renderSongLog();
+  initLightbox();
+  initReveal();
+  initPracticeReplay();
+
+  const yearEl = document.getElementById("year");
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+});

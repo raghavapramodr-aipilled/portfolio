@@ -1,0 +1,5 @@
+.DS_Store
+_backup-before-lens-update/
+portfolio-netlify.zip
+.netlify/
+node_modules/

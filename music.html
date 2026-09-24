@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Music — Raghava Pramod</title>
+<meta name="description" content="Playlists I keep going back to, plus a weekly pick with a bit about why.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Music — Raghava Pramod">
+<meta property="og:description" content="Playlists I keep going back to, plus a weekly pick with a bit about why.">
+<meta property="og:image" content="og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Music — Raghava Pramod">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css?v=24">
+</head>
+<body class="loading-lock">
+
+<div class="loader" id="loader" aria-hidden="true" data-phrase="Getting the sound right.">
+  <p class="loader-line"><span class="loader-type" id="loader-type"></span><span class="loader-cursor">|</span></p>
+</div>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <nav class="main-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html#about">About me</a></li>
+        <li><a href="shots.html">My shots</a></li>
+        <li><a href="articles.html">Articles</a></li>
+        <li><a href="music.html">Music</a></li>
+        <li><a href="contact.html">Say hi</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="page-hero wrap">
+    <div class="section-head">
+      <h1 id="music-heading">What I've been listening to</h1>
+    </div>
+    <p class="stories-intro">Four playlists I keep going back to for different moods, plus a weekly pick with a bit about why it's in rotation.</p>
+  </section>
+
+  <section class="playlists wrap">
+    <div class="playlist-grid" id="playlists-list"></div>
+  </section>
+
+  <section class="song-log wrap" id="song-log" aria-labelledby="song-log-heading">
+    <div class="section-head">
+      <h2 id="song-log-heading">Weekly pick</h2>
+    </div>
+    <div id="song-log-list"></div>
+  </section>
+
+  <section class="closing wrap" id="contact" aria-labelledby="closing-heading">
+    <h2 class="visually-hidden" id="closing-heading">Say hi</h2>
+    <p class="closing-lines">
+      <span class="line">That's most of it.</span>
+      <span class="line">More songs go up</span>
+      <span class="line">whenever I find them.</span>
+    </p>
+    <a class="closing-cta" href="https://open.spotify.com/user/36vazb5w8vdts3cxnagg9n65b" target="_blank" rel="noopener noreferrer" aria-label="Listen along on Spotify, opens in a new tab">Listen along on Spotify →</a>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year"></span> Raghava Pramod.</p>
+    <ul class="footer-links">
+      <li><a href="https://open.spotify.com/user/36vazb5w8vdts3cxnagg9n65b" target="_blank" rel="noopener noreferrer" aria-label="Spotify, opens in a new tab"><svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M7 9.2c3.2-1 7-.7 9.6 1"></path><path d="M7.6 12.6c2.7-.8 5.9-.5 8.1 1"></path><path d="M8.3 15.8c2.1-.6 4.5-.4 6.2.9"></path></svg></a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js?v=24"></script>
+</body>
+</html>

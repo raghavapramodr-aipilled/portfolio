@@ -1,0 +1,11 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#000000"/>
+  <g stroke="#2b2b2b" stroke-width="1">
+    <line x1="0" y1="90" x2="1200" y2="90"/>
+    <line x1="0" y1="540" x2="1200" y2="540"/>
+  </g>
+  <text x="70" y="118" font-family="'Space Grotesk', Arial, sans-serif" font-size="20" fill="#6e6e6e" letter-spacing="3">RAGHAVA PRAMOD</text>
+  <text x="66" y="270" font-family="'Space Grotesk', Arial, sans-serif" font-size="76" font-weight="700" fill="#ffffff">Hey, I'm Raghava.</text>
+  <text x="66" y="340" font-family="Inter, Arial, sans-serif" font-size="24" fill="#b0b0b0">People. Pixels. Percussion.</text>
+  <text x="70" y="500" font-family="Inter, Arial, sans-serif" font-size="16" letter-spacing="1" fill="#6e6e6e">INSTAGRAM.COM/RAGHAVAPRAMOD</text>
+</svg>

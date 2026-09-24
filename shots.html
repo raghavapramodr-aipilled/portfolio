@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My shots — Raghava Pramod</title>
+<meta name="description" content="Photo carousels from my Instagram, grouped by genre, with the perspective and composition tricks behind each one.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="My shots — Raghava Pramod">
+<meta property="og:description" content="Photo carousels from my Instagram, grouped by genre, with the perspective and composition tricks behind each one.">
+<meta property="og:image" content="og-image.svg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="My shots — Raghava Pramod">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css?v=24">
+</head>
+<body class="loading-lock">
+
+<div class="loader" id="loader" aria-hidden="true" data-phrase="Getting the light right.">
+  <p class="loader-line"><span class="loader-type" id="loader-type"></span><span class="loader-cursor">|</span></p>
+</div>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <nav class="main-nav" aria-label="Primary">
+      <ul>
+        <li><a href="index.html#about">About me</a></li>
+        <li><a href="shots.html">My shots</a></li>
+        <li><a href="articles.html">Articles</a></li>
+        <li><a href="music.html">Music</a></li>
+        <li><a href="contact.html">Say hi</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="shots-hero wrap">
+    <div class="section-head">
+      <h1 id="shots-heading">My shots</h1>
+    </div>
+    <p class="stories-intro" id="shots-intro">Straight from my Instagram, kept exactly as I posted them — every photo in every carousel, nothing trimmed.</p>
+  </section>
+
+  <section class="lens-section wrap" aria-labelledby="lens-heading">
+    <div class="section-head">
+      <h2 id="lens-heading">Pick a focal length</h2>
+    </div>
+
+    <div class="lens" role="group" aria-label="Browse shots by genre" id="lens">
+      <svg class="lens-lines" id="lens-lines" viewBox="0 0 100 100" aria-hidden="true"></svg>
+      <div class="lens-photo">
+        <img src="images/lens/lens.jpg" alt="" loading="lazy">
+      </div>
+      <div class="lens-scale" id="lens-scale"></div>
+      <div class="lens-index" aria-hidden="true"></div>
+      <div class="lens-genres" id="lens-genres"></div>
+    </div>
+
+    <p class="lens-hint">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11A8 8 0 1 0 18 16"/><path d="M20 5v6h-6"/></svg>
+      Hover a focal length to preview it, click to open that section
+    </p>
+  </section>
+
+  <p class="shots-empty wrap" id="shots-empty">Pick a focal length on the lens to open that section.</p>
+  <div id="shots-list"></div>
+
+  <section class="closing wrap" id="contact" aria-labelledby="closing-heading">
+    <h2 class="visually-hidden" id="closing-heading">Say hi</h2>
+    <p class="closing-lines">
+      <span class="line">That's most of it.</span>
+      <span class="line">More shots go up</span>
+      <span class="line">whenever I take them.</span>
+    </p>
+    <a class="closing-cta" href="https://www.instagram.com/raghavapramod/" target="_blank" rel="noopener noreferrer" aria-label="Come say hi on Instagram, opens in a new tab">
+      Come say hi on <svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg>
+    </a>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>&copy; <span id="year"></span> Raghava Pramod.</p>
+    <ul class="footer-links">
+      <li><a href="https://www.instagram.com/raghavapramod/" target="_blank" rel="noopener noreferrer" aria-label="Instagram, opens in a new tab"><svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><line x1="17.5" y1="6.5" x2="17.5" y2="6.5"></line></svg></a></li>
+      <li><a href="https://www.linkedin.com/in/raghava-pramod-16317697/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn, opens in a new tab"><svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg></a></li>
+      <li><a href="https://open.spotify.com/user/36vazb5w8vdts3cxnagg9n65b" target="_blank" rel="noopener noreferrer" aria-label="Spotify, opens in a new tab"><svg class="ig-glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="M7 9.2c3.2-1 7-.7 9.6 1"></path><path d="M7.6 12.6c2.7-.8 5.9-.5 8.1 1"></path><path d="M8.3 15.8c2.1-.6 4.5-.4 6.2.9"></path></svg></a></li>
+    </ul>
+  </div>
+</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Photograph viewer" aria-hidden="true">
+  <button class="lightbox-nav prev" id="lightbox-prev" type="button" aria-label="Previous photograph">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+  </button>
+  <figure class="lightbox-figure">
+    <img id="lightbox-img" src="" alt="">
+    <figcaption class="lightbox-caption" id="lightbox-caption"></figcaption>
+  </figure>
+  <button class="lightbox-nav next" id="lightbox-next" type="button" aria-label="Next photograph">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+  </button>
+  <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Close photograph viewer">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+  </button>
+</div>
+
+<script src="script.js?v=24"></script>
+</body>
+</html>
