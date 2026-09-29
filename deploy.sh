@@ -75,7 +75,7 @@ upload_directly() {
   local stage
   stage="$(mktemp -d)"
   git archive HEAD | tar -x -C "$stage"
-  rm -f "$stage/deploy.sh" "$stage/.gitignore"
+  rm -rf "$stage/deploy.sh" "$stage/.gitignore" "$stage/README.md" "$stage/screenshots"   # same as netlify.toml's build command
   (cd "$stage" && netlify deploy --prod --no-build --dir . --site "$SITE_ID" --message "${MSG%%$'\n'*}")
   rm -rf "$stage"
 }
